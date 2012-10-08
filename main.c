@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <stdio.h> 
      
 int main()  
@@ -29,3 +30,16 @@ int main()
         // 关闭文件  
         fclose(fp);  
     }  
+=======
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main()
+{
+  char *sp = NULL;
+  sp = "hello world";
+  printf("%s\n", sp);
+  return 0;
+}
+>>>>>>> 363b59a5b1366c83d801543047c9ca34cffb1166
