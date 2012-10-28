@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <signal.h>
-#include <stdarg.h>
 #include <stdlib.h>
 
 void terminatehandler(int signumber);
