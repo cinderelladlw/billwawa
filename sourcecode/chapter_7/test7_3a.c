@@ -25,7 +25,7 @@ int main(void)
     {
         printf("string:%s\n",shmptr);
 
-        sleep(30);
+        sleep(2);
     }
     exit(0);
 }

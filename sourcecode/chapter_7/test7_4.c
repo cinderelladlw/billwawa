@@ -8,6 +8,7 @@
 #define SEM_MODE (IPC_CREAT|0660)
 
 void printf_stat(union semun *arg);
+void changemode(int sid,char *mode);
 
 int main(void)
 {
