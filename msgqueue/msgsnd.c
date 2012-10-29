@@ -45,17 +45,6 @@ int main()
   {  
     perror("message posted");  
     exit(1);  
-  }  
-  if(msgrcv(qid,&msg,BUFSZ,0,0)<0)  
-  {  
-    perror("msgrcv");  
-    exit(1);  
-  }  
-  printf("message is:%s\n",(&msg)->msg_text);  
-  if((msgctl(qid,IPC_RMID,NULL))<0)  
-  {  
-    perror("msgctl");  
-    exit(1);  
-  }  
-  exit(0);  
+  }
+    
 }

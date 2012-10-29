@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <signal.h>
 #include <stdarg.h>
+#include <stdlib.h>
+
 void intermithandler(int signumber);
 void continuehandler(int signumber);
 void terminatehandler(int signumber);

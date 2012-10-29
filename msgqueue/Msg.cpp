@@ -34,19 +34,13 @@ class Msg
   
 int main()  
 {  
-  /*int qid;  
-  IPC关键字*/  
-  /*key_t key;  
-  int len;  
-  struct message msg;*/
-  /*产生IPC关键字,用当前目录*/  
   Msg msg1;
   if((key=ftok(".",'a'))==-1)  
   {  
     perror("ftok");  
     exit(1);  
   }  
-  /*创建一个新的消息队列,返回消息队列标识符*/  
+
   if((qid=msg1.msgget(key,IPC_CREAT|0666))==-1)  
   {  
     perror("msgget");  
