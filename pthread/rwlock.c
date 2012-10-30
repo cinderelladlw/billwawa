@@ -2,7 +2,7 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-#define THREADCOUNT 100
+#define THREADCOUNT 10
 
 pthread_rwlock_t rwlock;
 
@@ -40,9 +40,9 @@ int main(void)
   pthread_attr_setdetachstate(&threadattr, PTHREAD_CREATE_DETACHED);
   
   pthread_rwlock_wrlock(&rwlock);
-  for(i = 0; i < THREADCOUNT; i ++) {
+  for(i = 0; i < THREADCOUNT; i++) {
     rand = random();
-    if(rand <halfmax) {
+    if(rand < halfmax) {
       pthread_create(&reader_id, &threadattr, reader, (void *)readercount);
       printf("created reader %d \n", readercount++);
     }
