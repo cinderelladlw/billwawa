@@ -2,7 +2,7 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-#define THREADCOUNT 10
+#define THREADCOUNT 20
 
 pthread_rwlock_t rwlock;
 
@@ -31,7 +31,7 @@ int main(void)
   pthread_t reader_id, writer_id;
   pthread_attr_t threadattr;
   int i, rand;
-  int readercount = 1, writercount = 1;
+  int readercount = 1, writercount = 100;
   int halfmax = RAND_MAX/2;
   if(pthread_rwlock_init(&rwlock, NULL)) {
     printf("init pthread error.\n");
