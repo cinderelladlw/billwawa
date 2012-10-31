@@ -90,7 +90,7 @@ int main(void)
 		Sem_V(semid);
 	}
 	value = GetvalueSem(semid);
-	printf("信号量值为:%d\n",value);
+	printf("value:%d\n",value);
 	
 	DestroySem(semid);
 	return 0;
