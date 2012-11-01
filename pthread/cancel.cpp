@@ -3,7 +3,7 @@
 #include<pthread.h>
 using namespace std;
 
-#define INT_MAX 23
+#define MAX 23333333
 
 pthread_t pid[3];
 
@@ -15,21 +15,22 @@ void* thread_run_1(void* arg){
     pthread_setcancelstate(state, &oldstate);
 
     cout<<"oldstate is "<<(state == oldstate? "Deferred":"Async")<<endl;
-
-    //耗时间的循环
-    for (int i = 1; i<=INT_MAX; ++i) 
-      usleep(100000);
-  
     cout<<"before testcancel"<<endl;
+    while(1) {
     pthread_testcancel();
+    pthread_testcancel();
+    }
     cout<<"after testcancel"<<endl;
     cout<<"thread 1 done!"<<endl;
 }
 
 void* thread_run_2(void* arg){
     cout<<"Now in the thread 2\n";
+//    pthread_join(pid[1],NULL);
+    sleep(1);
+    for(;;) {
     pthread_cancel(pid[1]);
-    sleep(2);
+    }
     cout<<"thread 2 done!"<<endl;
 }
 
@@ -45,6 +46,6 @@ int main()
         return -1;
     }
 
-    sleep(5);
+    sleep(10);
     cout<<"Main thread done!"<<endl;
 }
