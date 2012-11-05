@@ -17,21 +17,21 @@ struct linknode *create() //创建链表，接受INT型值
   head=tail=NULL;
   while(scanf("%d",&datas)==1) //输入方式有待改进
   {
-  temp=(struct linknode *)malloc(sizeof(struct linknode));
-  if(temp==NULL)
-  printf("allocate erro!");
-  else
-  {
-  temp->data=datas;
-  temp->next=NULL;
-  if(head==NULL)
-  head=tail=temp;
-  else
-  {
-  tail->next=temp;
-  tail=temp;
-  }
-  }
+    temp=(struct linknode *)malloc(sizeof(struct linknode));
+    if(temp==NULL)
+    printf("allocate erro!");
+    else
+    {
+      temp->data=datas;
+      temp->next=NULL;
+      if(head==NULL)
+      head=tail=temp;
+      else
+      {
+        tail->next=temp;
+        tail=temp;
+      }
+    }
   }
   return head;
 }
