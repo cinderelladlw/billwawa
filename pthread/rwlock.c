@@ -20,7 +20,7 @@ void *writer(void *pvoid)
 {
   pthread_rwlock_wrlock(&rwlock);
   printf("writer %d worked.\n", (int)pvoid);
-    if(pthread_rwlock_unlock(&rwlock)) {
+  if(pthread_rwlock_unlock(&rwlock)) {
     printf("writer %d unlock error!\n", (int)pvoid);
   }
   return NULL;
