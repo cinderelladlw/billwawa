@@ -1,0 +1,2 @@
+dup2_1=1
+This is a test of dup() & dup2()
