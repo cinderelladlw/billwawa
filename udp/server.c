@@ -16,14 +16,13 @@ void udps_respon(int sockfd)
    
   while(1)
   { /*等待数据请求*/
-  n=recvfrom(sockfd,msg, MAX_MSG_SIZE, 0, (struct sockaddr*)&addr,&addrlen);
-  printf("222222222222222\n");
-  msg[n]='\0';
-  /*显示服务器端已经收到了信息*/
-  fprintf(stdout,"I have received: %s",msg);
-  /*数据回送*/
-  sendto(sockfd,msg,n,0,(struct sockaddr*)&addr,addrlen);
-  printf("333333\n");
+    n=recvfrom(sockfd,msg, MAX_MSG_SIZE, 0, (struct sockaddr*)&addr,&addrlen);
+    msg[n]='\0';
+
+    /*显示服务器端已经收到了信息*/
+    fprintf(stdout,"I have received: %s",msg);
+    /*数据回送*/
+    sendto(sockfd,msg,n,0,(struct sockaddr*)&addr,addrlen);
   }
 }
 

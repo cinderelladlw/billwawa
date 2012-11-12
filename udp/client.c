@@ -14,15 +14,13 @@ void udpc_requ(int sockfd,const struct sockaddr_in *addr,int len)
   int n;
   while(1)  
   { /*从键盘读入，写到服务端*/
+    printf("insert>");
     fgets(buffer,MAX_BUF_SIZE,stdin);
     sendto(sockfd,buffer,strlen(buffer),0,(struct sockaddr *)addr,len);
-    printf("11111111\n");
     memset(buffer, 0x00, MAX_BUF_SIZE);
     /*从网络上读，写到屏幕上*/
-    printf("XXXXXXXXXXXXXXXXXXXXXXXX\n");
     n=recvfrom(sockfd,buffer,MAX_BUF_SIZE, 0, NULL, NULL);
     buffer[n]='\0';
-    printf("444444444\n");
     fputs(buffer,stdout);
   }
 }
