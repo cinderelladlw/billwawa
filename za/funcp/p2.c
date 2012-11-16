@@ -8,9 +8,10 @@ int main()
 {
   fp a = &myfun;
   a(10);
-  //...............
+  
   fpname = &myfun;
   (*fpname)(23); 
+  
   return 0;  
 }
 
