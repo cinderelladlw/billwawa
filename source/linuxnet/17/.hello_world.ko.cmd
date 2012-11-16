@@ -1,0 +1,1 @@
+cmd_/home/boygirl/.ssh/billwawa/source/linuxnet/17/hello_world.ko := ld -r -m elf_x86_64 -T /usr/src/linux-headers-3.2.0-29-generic/scripts/module-common.lds --build-id  -o /home/boygirl/.ssh/billwawa/source/linuxnet/17/hello_world.ko /home/boygirl/.ssh/billwawa/source/linuxnet/17/hello_world.o /home/boygirl/.ssh/billwawa/source/linuxnet/17/hello_world.mod.o
