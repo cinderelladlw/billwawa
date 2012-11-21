@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 //#include "Log.h"
-
 int ParseDNS(char *ip, const char *dns)
 {
   struct hostent *ent;
@@ -18,6 +17,7 @@ int ParseDNS(char *ip, const char *dns)
   strcpy(ip, inet_ntoa(*(struct in_addr *)ent->h_addr));
   return 0;
 }
+#if 0
 //UDP
 int UdpInit(int port)
 {
@@ -74,7 +74,7 @@ int UdpRecvFrom(int sockfd, char *buf, int len, char *addr, int *port)
   if(port) *port = ntohs(saddr.sin_port);
   return len;  
 }
-/*  
+#endif
 int TcpSelect(int ilFd, long iSeconds)
 {
   int ilRc;
@@ -119,7 +119,7 @@ int TcpListen(int port)
     close(sockfd);
     return -1;
   }
-  memset((char *)&addr, 0, sizeof(saddr));
+  memset((char *)&saddr, 0, sizeof(saddr));
   saddr.sin_family = AF_INET;
   saddr.sin_addr.s_addr = htonl(INADDR_ANY);
   saddr.sin_port = htons(port);
@@ -135,7 +135,7 @@ int TcpListen(int port)
   }
   return sockfd; 
 }
-int TcpListenX(char *iP, int port);
+int TcpListenX(char *iP, int port)
 {
   int sockfd;
   int reuseFlag = -1;
@@ -146,10 +146,10 @@ int TcpListenX(char *iP, int port);
   }
   if(setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (const char *)&reuseFlag, sizeof(int)) == -1) {
     printf("...sd");
-    close(socked);
+    close(sockfd);
     return -1;
   }
-  memset((char *)&addr, 0, sizeof(saddr));
+  memset((char *)&saddr, 0, sizeof(saddr));
   saddr.sin_family = AF_INET;
   saddr.sin_addr.s_addr = htonl(iP);
   saddr.sin_port = htons(port);
@@ -175,7 +175,7 @@ int TcpConnect(const char *addr, int port)
     printf("...sdsds  \n");
     return -1;
   }
-  if((socket = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+  if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
     printf("...sdsds  \n");
     return -1;
   }
@@ -190,6 +190,7 @@ int TcpConnect(const char *addr, int port)
   }
   return sockfd; 
 }
+#if 0
 int TcpConnectX(char *alIp, int ilPort, long ilTime)
 {
   int sockfd = -1;
@@ -200,9 +201,9 @@ int TcpConnectX(char *alIp, int ilPort, long ilTime)
     return -1;
   }
   memset((char *)&slServ_addr, 0x00, sizeof(slServ_addr));
-  saddr.sin_family = AF_INET;
-  saddr.sin_addr.s_addr = inet_addr(alIp);
-  saddr.sin_port = htons(ilPort);
+  slServ_addr.sin_family = AF_INET;
+  slServ_addr.sin_addr.s_addr = inet_addr(alIp);
+  slServ_addr.sin_port = htons(ilPort);
   flag = fcntl(sockfd, F_GETFL, 0);
   if(flag < 0) {
     printf(".\n");
@@ -236,6 +237,7 @@ int TcpConnectX(char *alIp, int ilPort, long ilTime)
     return -1;
   } 
 }
+#endif
 int TcpAccept(int sockfd, char *addr, int *port)
 {
   int ret;
@@ -258,7 +260,7 @@ int TcpAccept(int sockfd, char *addr, int *port)
 int TcpSoLinger(int sockfd, int on ,int linger)
 {
   struct linger slinger;
-  memset(&slinger, 0x00, sizeof(slinger);
+  memset(&slinger, 0x00, sizeof(slinger));
   slinger.l_onoff = on;
   slinger.l_linger = linger;
   if(setsockopt(sockfd, SOL_SOCKET, SO_LINGER, &slinger, sizeof(slinger)) == -1) {
@@ -276,11 +278,11 @@ int TcpNodelay(int sockfd, int on)
   return 0; 
 }
 
-int TcpRecv(int sockfd, char *buf, int len ,int tiemout)
+int TcpRecv(int sockfd, char *buf, int len ,int timeout)
 {
   int ret;
   int offset = 0;
-  int revlen = 0;
+  int rcvlen = 0;
   struct timeval tv_buf;
   if(timeout > 0) {
     tv_buf.tv_sec = timeout;
@@ -295,9 +297,9 @@ int TcpRecv(int sockfd, char *buf, int len ,int tiemout)
     if(rcvlen == -1) {
       if(errno == EINTR) continue;
       if(errno == EAGAIN)
-        printf(".shh\n");
+        printf(".shh %s\n", strerror(errno));
       else
-        printf(".shh\n");
+        printf(".shh %s\n", strerror(errno));
       ret = -1;
       break;
     }
@@ -349,10 +351,10 @@ int TcpRead(int sockfd, char *buf, int len, int lenlen, int timeout)
   }
   else {
     if(len > 0) return TcpRecv(sockfd, buf, len, timeout);
-    if(timeout > )) {
+    if(timeout > 0) {
       tv_buf.tv_sec = timeout;
       tv_buf.tv_usec = 0;
-      if(setsockopt(sockdf, SOL_SOCKET, SO_RCVTIMEO, &tv_buf, sizeof(tv_buf)) == -1) {
+      if(setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv_buf, sizeof(tv_buf)) == -1) {
         return -1;
       }
     }
@@ -395,7 +397,6 @@ int TcpWrite(int sockfd, const char *buf, int len, int lenlen)
   }
   return TcpSend(sockfd, buf, len);  
 }
-*/
 
 
 
