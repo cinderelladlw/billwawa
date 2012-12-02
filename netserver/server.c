@@ -35,6 +35,14 @@ void setnonblocking(int sock)
 }
 int main()
 {
+    /* ************************************************** */ 
+//    void *handle;
+//    handle = dlopen("./lib/libfile.so", RTLD_LAZY);
+//    void (*sendfile)();
+//    sendfile = dlsym(handle, "sendfile");
+//    (* sendfile)();
+//    dlclose(handle);    
+    /* ************************************************** */ 
     int i, maxi, listenfd, connfd, sockfd,epfd,nfds;
     ssize_t n;
     char line[MAXLINE];
@@ -74,9 +82,10 @@ int main()
     for(;;) {
         //等待epoll事件的发生
         nfds=epoll_wait(epfd, events, 20, 500);
-
+        printf("...\n");
         //处理所发生的所有事件     
         for(i=0;i<nfds;++i) {
+            printf("nfds..\n");
             //有新的客户链接listenfd
             if(events[i].data.fd == listenfd)
             {
@@ -93,6 +102,7 @@ int main()
                 //设置用于读操作的文件描述符
                 ev.data.fd = connfd;
                 //设置用于注测的读操作事件
+//                ev.events=EPOLLIN|EPOLLET;
                 ev.events=EPOLLIN|EPOLLET;
                 //ev.events = EPOLLIN;
                 //注册ev
@@ -120,14 +130,17 @@ int main()
                 ev.data.fd = sockfd;
                 //设置用于注测的写操作事件
                 ev.events = EPOLLOUT|EPOLLET;
+//                ev.events = EPOLLIN|EPOLLET;
                 //修改sockfd上要处理的事件为EPOLLOUT
                 epoll_ctl(epfd, EPOLL_CTL_MOD, sockfd, &ev);
             }
             else if(events[i].events & EPOLLOUT) 
             //已注册的用户请求server发送数据
             {   
+                cout << "EPOLLIN 2" << endl;
                 sockfd = events[i].data.fd;
-                write(sockfd, line, n);
+                n =  write(sockfd, line, 5);
+                printf("n : %d [%s]", n, line);
                 //设置用于读操作的文件描述符
                 ev.data.fd = sockfd;
                 //设置用于注测的读操作事件
