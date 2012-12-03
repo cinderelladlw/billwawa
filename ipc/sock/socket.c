@@ -141,11 +141,11 @@ int TcpListenX(char *iP, int port)
   int reuseFlag = -1;
   struct sockaddr_in saddr;
   if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-    printf("......\n");
+    printf("TcpListenX 1:%s", strerror(errno));
     return -1;
   }
   if(setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (const char *)&reuseFlag, sizeof(int)) == -1) {
-    printf("...sd");
+    printf("TcpListenX 2:%s", strerror(errno));
     close(sockfd);
     return -1;
   }
@@ -155,12 +155,12 @@ int TcpListenX(char *iP, int port)
   saddr.sin_port = htons(port);
 
   if(bind(sockfd, (struct sockaddr *)&saddr, sizeof(saddr)) == -1) {
-    printf("...sd");
+    printf("TcpListenX 3:%s", strerror(errno));
     close(sockfd);
     return -1;
   }
   if(listen(sockfd, SOMAXCONN) == -1) {
-    printf("...sd");
+    printf("TcpListenX 4:%s", strerror(errno));
     close(sockfd);
     return -1;
   }
@@ -172,19 +172,19 @@ int TcpConnect(const char *addr, int port)
   char ip[16];
   struct sockaddr_in saddr;
   if(ParseDNS(ip, addr) != 0) {
-    printf("...sdsds  \n");
+    printf("TcpConnect 1\n");
     return -1;
   }
   if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-    printf("...sdsds  \n");
+    printf("TcpConnect 2\n");
     return -1;
   }
   memset((char *)&saddr, 0x00, sizeof(saddr));
   saddr.sin_family = AF_INET;
   saddr.sin_addr.s_addr = inet_addr(ip);
   saddr.sin_port = htons(port);
-  if(connect(sockfd, (struct sockaddr_in *)&saddr, sizeof(saddr)) == -1) {
-    printf("..........................\n");
+  if(connect(sockfd, (struct sockaddr *)&saddr, sizeof(saddr)) == -1) {
+    printf("TcpConnect 3\n");
     close(sockfd);
     return -1;
   }
@@ -246,17 +246,20 @@ int TcpAccept(int sockfd, char *addr, int *port)
   memset(&saddr, 0x00, sizeof(saddr));
   while(1) {
     if((ret = accept(sockfd, (struct sockaddr *)&saddr, &saddrLen)) == -1) {
-      if(errno == EINTR) continue;
-      printf(".....sd.sdsa\n");
+      if(errno == EINTR) 
+        continue;
+      printf("TcpAccept \n");
       return -1;
     }
     break;
   }
-  if(addr) strcpy(addr, (char *)inet_ntoa(saddr.sin_addr));
-  if(port) *port = ntohs(saddr.sin_port);
+  if(addr) 
+    strcpy(addr, (char *)inet_ntoa(saddr.sin_addr));
+  if(port) 
+    *port = ntohs(saddr.sin_port);
   return ret;
- 
 }
+
 int TcpSoLinger(int sockfd, int on ,int linger)
 {
   struct linger slinger;
@@ -288,18 +291,19 @@ int TcpRecv(int sockfd, char *buf, int len ,int timeout)
     tv_buf.tv_sec = timeout;
     tv_buf.tv_usec = 0;
     if(setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv_buf, sizeof(tv_buf)) == -1) {
-      printf("..sdsdsdsdsdsddsds\n");
+      printf("TcpRecv 1 :%s\n", strerror(errno));
       return -1;
     }
   }
   while(1) {
     rcvlen = recv(sockfd, buf+offset, len-offset, 0);
+    printf("rcvlen:%d\n", rcvlen);
     if(rcvlen == -1) {
       if(errno == EINTR) continue;
       if(errno == EAGAIN)
-        printf(".shh %s\n", strerror(errno));
+        printf("TcpRecv 2:%s\n", strerror(errno));
       else
-        printf(".shh %s\n", strerror(errno));
+        printf("TcpRecv 3:%s, %d\n", strerror(errno), errno);
       ret = -1;
       break;
     }
@@ -338,6 +342,7 @@ int TcpSend(int sockfd, const char *buf, int len)
     if(offset == len) return len;
   }  
 }
+
 int TcpRead(int sockfd, char *buf, int len, int lenlen, int timeout)
 {
   int ret;
