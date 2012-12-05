@@ -19,11 +19,11 @@ void add()
   printf("2.add ok!\n");
 }
 
-int main()
-{
-  add();
-  return 0;
-}
+//int main()
+//{
+//  add();
+//  return 0;
+//}
 
 //execvp();
 
