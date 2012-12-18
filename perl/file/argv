@@ -1,0 +1,5 @@
+#!/usr/bin/perl
+$var = $ARGV[0];
+print $var."\n";
+$number= @ARGV;
+print $number."\n";

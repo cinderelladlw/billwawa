@@ -1,0 +1,5 @@
+#!/usr/bin/perl
+@ARGV = ("myfile1", "myfile2"); #实际上由命令行参数赋值
+    while ($line = <>) {
+    print ($line);
+} 

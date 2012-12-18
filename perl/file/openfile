@@ -1,0 +1,11 @@
+#!/usr/bin/perl
+unless (open(INFILE, "infile")) {
+  die("input file infile can not be opened.\n");
+}
+if(-e "outfile") {
+  die("outfile file already exists.\n");
+}
+
+unless(open(OUTFILE, ">outfile")) {
+  die("output file outfile cannot be opend.\n");
+}
