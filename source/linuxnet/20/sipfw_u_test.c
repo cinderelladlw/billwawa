@@ -1,4 +1,3 @@
-#if 0
 #include <unistd.h>
 #include <stdio.h>
 #include <linux/types.h>
@@ -479,4 +478,3 @@ void main(int argc, char *argv[])
 
 	return 0;
 }
-#endif

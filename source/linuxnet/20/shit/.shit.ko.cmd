@@ -1,0 +1,1 @@
+cmd_/home/bill/git/billwawa/source/linuxnet/20/shit/shit.ko := ld -r -m elf_i386 -T /usr/src/linux-headers-3.2.0-34-generic-pae/scripts/module-common.lds --build-id  -o /home/bill/git/billwawa/source/linuxnet/20/shit/shit.ko /home/bill/git/billwawa/source/linuxnet/20/shit/shit.o /home/bill/git/billwawa/source/linuxnet/20/shit/shit.mod.o

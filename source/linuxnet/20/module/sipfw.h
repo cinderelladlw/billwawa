@@ -5,7 +5,7 @@
 #ifdef __KERNEL__
 #include <linux/module.h>
 #include <linux/kernel.h>
-#include <linux/init.h>
+//#include <linux/init.h>
 #include <linux/types.h>
 #include <linux/netdevice.h>
 #include <linux/skbuff.h>
@@ -15,7 +15,8 @@
 #include <linux/ip.h>
 #include <linux/netlink.h>
 #include <linux/spinlock.h>
-#include <asm/semaphore.h>
+//#include <asm/semaphore.h>
+#include <linux/semaphore.h>
 #include <net/sock.h>
 #include <linux/tcp.h>
 #include <linux/udp.h>
