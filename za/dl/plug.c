@@ -1,30 +1,19 @@
 #include <stdio.h>
 
+int sx = 250;
+void _add(int a, int b);
 void add()
 {
-  char *argv[] = {"ls", "-al", NULL};
-  if(fork() > 0) {
-    printf("parent..\n");
-    sleep(10);
-    printf("parent..end...\n");
-    
-  } else {
-    printf("child..\n");
-    execvp("ls", argv);  
-    sleep(7);
-    printf("child..end...\n");
-//    exit(1);
-  }
-  printf("add ok!\n");
+  int i = 5;
+  int j = 6;
+  _add(i, j); 
   printf("2.add ok!\n");
 }
 
-//int main()
-//{
-//  add();
-//  return 0;
-//}
-
-//execvp();
+void _add(int a, int b)
+{
+  printf("add:%d\n", a+b);
+  printf("sx :%d\n", sx);
+}
 
 
