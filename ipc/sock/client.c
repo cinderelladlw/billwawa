@@ -3,7 +3,7 @@
 
 int main()
 {
-  int sockfd = TcpConnect("127.0.0.1", 9998);
+  int sockfd = TcpConnect("127.0.0.1", 7890);
   printf("sockfd:%d\n", sockfd);
   char *sx = "hello world";
   printf("strlen(sx):%d\n", strlen(sx));

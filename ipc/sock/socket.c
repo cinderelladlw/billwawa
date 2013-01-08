@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 //#include "Log.h"
+
 int ParseDNS(char *ip, const char *dns)
 {
   struct hostent *ent;
@@ -17,6 +18,7 @@ int ParseDNS(char *ip, const char *dns)
   strcpy(ip, inet_ntoa(*(struct in_addr *)ent->h_addr));
   return 0;
 }
+
 #if 0
 //UDP
 int UdpInit(int port)
@@ -75,6 +77,7 @@ int UdpRecvFrom(int sockfd, char *buf, int len, char *addr, int *port)
   return len;  
 }
 #endif
+
 int TcpSelect(int ilFd, long iSeconds)
 {
   int ilRc;
@@ -105,10 +108,11 @@ int TcpSelect(int ilFd, long iSeconds)
     return 4;
   return 0;
 }
+
 int TcpListen(int port)
 {
   int sockfd;
-  int reuseFlag = -1;
+  int reuseFlag = 1;
   struct sockaddr_in saddr;
   if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
     printf("......\n");
@@ -135,10 +139,11 @@ int TcpListen(int port)
   }
   return sockfd; 
 }
+
 int TcpListenX(char *iP, int port)
 {
   int sockfd;
-  int reuseFlag = -1;
+  int reuseFlag = 1;
   struct sockaddr_in saddr;
   if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
     printf("TcpListenX 1:%s", strerror(errno));
@@ -151,7 +156,7 @@ int TcpListenX(char *iP, int port)
   }
   memset((char *)&saddr, 0, sizeof(saddr));
   saddr.sin_family = AF_INET;
-  saddr.sin_addr.s_addr = htonl(iP);
+  saddr.sin_addr.s_addr = inet_addr(iP);
   saddr.sin_port = htons(port);
 
   if(bind(sockfd, (struct sockaddr *)&saddr, sizeof(saddr)) == -1) {
@@ -166,6 +171,7 @@ int TcpListenX(char *iP, int port)
   }
   return sockfd; 
 }  
+
 int TcpConnect(const char *addr, int port)
 {
   int sockfd;
