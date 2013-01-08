@@ -16,6 +16,7 @@
 #include <fcntl.h>
 
 // TCP
+int GetLocalIP(char *ip, const char *netdev);
 int ParseDNS(char *ip, const char *dns);
 int TcpSelect(int ilFd, long iSeconds);
 int TcpListen(int port);
@@ -43,7 +44,6 @@ int mbsSetMcastTTL(int sockfd, int ttl);
 int mbsSetMcastLOOP(int sockfd, int loop);
 int mbsAddMemberIP(int sockfd, char *multiaddr);
 int mbsDropMemberIP(int sockfd, char *multiaddr);
-
 
 #endif
 
