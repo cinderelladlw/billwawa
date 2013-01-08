@@ -1,5 +1,6 @@
-#ifndef __socket_h_
-#define __socket_h_
+#ifndef __SOCKET_H__ 
+#define __SOCKET_H__
+
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
@@ -12,13 +13,15 @@
 #include <sys/socket.h>
 #include <net/if.h>
 #include <sys/ioctl.h>
+#include <fcntl.h>
 
+// TCP
 int ParseDNS(char *ip, const char *dns);
 int TcpSelect(int ilFd, long iSeconds);
 int TcpListen(int port);
 int TcpListenX(char *iP, int port);
 int TcpConnect(const char *addr, int port);
-//int TcpConnectX(char *alIp, int ilPort, long ilTime);
+int TcpConnectX(char *alIp, int ilPort, long ilTime);
 int TcpAccept(int sockfd, char *addr, int *port);
 
 int TcpSoLinger(int sockfd, int on ,int linger);
@@ -28,18 +31,19 @@ int TcpRecv(int sockfd, char *buf, int len ,int timeout);
 int TcpSend(int sockfd, const char *buf, int len);
 int TcpRead(int sockfd, char *buf, int len, int lenlen, int timeout);
 int TcpWrite(int sockfd, const char *buf, int len, int lenlen);
+
 //UDP
-//int UdpInit(int port);
-//int UdpSendTo(int sockfd, const char *buf, int len, const char *addr, int port);
-//int UdpRecvFrom(int sockfd, char *buf, int len, char *addr, int *port);
-/*
+int UdpInit(int port);
+int UdpSendTo(int sockfd, const char *buf, int len, const char *addr, int port);
+int UdpRecvFrom(int sockfd, char *buf, int len, char *addr, int *port);
+
 int UdpMCastRevInit(const char *localAddr, const char *mcastAddr, int mcastPort);
 int mbsSetMcastIF(int sockfd, char *interface_addr);
 int mbsSetMcastTTL(int sockfd, int ttl);
 int mbsSetMcastLOOP(int sockfd, int loop);
 int mbsAddMemberIP(int sockfd, char *multiaddr);
 int mbsDropMemberIP(int sockfd, char *multiaddr);
-*/
+
 
 #endif
 

@@ -19,8 +19,7 @@ int ParseDNS(char *ip, const char *dns)
   return 0;
 }
 
-#if 0
-//UDP
+// UDP
 int UdpInit(int port)
 {
   int sockfd;
@@ -76,7 +75,6 @@ int UdpRecvFrom(int sockfd, char *buf, int len, char *addr, int *port)
   if(port) *port = ntohs(saddr.sin_port);
   return len;  
 }
-#endif
 
 int TcpSelect(int ilFd, long iSeconds)
 {
@@ -196,7 +194,7 @@ int TcpConnect(const char *addr, int port)
   }
   return sockfd; 
 }
-#if 0
+
 int TcpConnectX(char *alIp, int ilPort, long ilTime)
 {
   int sockfd = -1;
@@ -221,7 +219,7 @@ int TcpConnectX(char *alIp, int ilPort, long ilTime)
     close(sockfd);
     return -1;
   }
-  ilRc = connect(sockfd, (struct sockaddr_in *)&slServ_addr, sizeof(slServ_addr));
+  ilRc = connect(sockfd, (struct sockaddr *)&slServ_addr, sizeof(slServ_addr));
   if(ilRc < 0) {
     if(errno != EINPROGRESS && errno != 0) {
       printf("...........\n");
@@ -243,7 +241,7 @@ int TcpConnectX(char *alIp, int ilPort, long ilTime)
     return -1;
   } 
 }
-#endif
+
 int TcpAccept(int sockfd, char *addr, int *port)
 {
   int ret;
@@ -278,6 +276,7 @@ int TcpSoLinger(int sockfd, int on ,int linger)
   }
   return 0;
 }
+
 int TcpNodelay(int sockfd, int on)
 {
   if(setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on)) == -1) {
@@ -333,6 +332,7 @@ int TcpRecv(int sockfd, char *buf, int len ,int timeout)
     }
   }
 }
+
 int TcpSend(int sockfd, const char *buf, int len)
 {
   int offset = 0;
@@ -412,13 +412,30 @@ int TcpWrite(int sockfd, const char *buf, int len, int lenlen)
 
 
 
+int UdpMCastRevInit(const char *localAddr, const char *mcastAddr, int mcastPort)
+{
 
-/*
-int UdpMCastRevInit(const char *localAddr, const char *mcastAddr, int mcastPort);
-int mbsSetMcastIF(int sockfd, char *interface_addr);
-int mbsSetMcastTTL(int sockfd, int ttl);
-int mbsSetMcastLOOP(int sockfd, int loop);
-int mbsAddMemberIP(int sockfd, char *multiaddr);
-int mbsDropMemberIP(int sockfd, char *multiaddr);
+}
 
-*/
+int mbsSetMcastIF(int sockfd, char *interface_addr)
+{
+
+}
+
+int mbsSetMcastTTL(int sockfd, int ttl)
+{
+
+}
+int mbsSetMcastLOOP(int sockfd, int loop)
+{
+
+}
+int mbsAddMemberIP(int sockfd, char *multiaddr)
+{
+
+}
+int mbsDropMemberIP(int sockfd, char *multiaddr)
+{
+
+}
+
