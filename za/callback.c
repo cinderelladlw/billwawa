@@ -1,9 +1,11 @@
 #include <stdio.h>
 
 typedef void(*fp)(int);
+
 void getcall(fp, int);
 void f1(int a);
 void f2(int a);
+
 int main()
 {
   getcall(f1, 10);

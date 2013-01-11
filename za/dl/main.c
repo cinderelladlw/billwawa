@@ -17,6 +17,7 @@ int main()
     fprintf(stderr, "%s\n", error);
     exit(1);
   }
+
   (*cosine)();
   dlclose(handle);
   return 0;

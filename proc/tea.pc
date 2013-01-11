@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+EXEC SQL INCLUDE sqlca;
+EXEC SQL INCLUDE sqlda;
+
+EXEC SQL BEGIN DECLARE SECTION;
+  VARCHAR username[20];
+  VARCHAR password[20];
+EXEC SQL END DECLARE SECTION;
+
+void sqlerror();
+
+int main()
+{
+  EXEC SQL BEGIN DECLARE SECTION;
+    int emp_number;
+    VARCHAR emp_name[15];
+    float salary;
+    float commission;
+  EXEC SQL END DECLARE SECTION;
+  
+  int total_number;
+  strcpy(username.arr, "SCOTT");
+  username.len = strlen(username.arr);
+  strcpy(password.arr, "TIGER");
+  password.len = strlen(password.arr);
+  
+  EXEC SQL WHENEVER SQLERROR DO sqlerror();
+  EXEC SQL CONNECT :username IDENTIFIED BY :password;
+  printf("\n connected to oracle as user:%s\n",username.arr);
+  total_number = 0;
+  while(1) {
+    emp_number = 0;
+    printf(" number:\n");
+    scanf("%d", &emp_number);
+    if(emp_number == 0) break;
+    EXEC SQL WHENEVER NOT FOUND GOTO notfound;
+    EXEC SQL SELECT ENAME,SAL,COMM
+      INTO :emp_name,:salary,:commission
+      FROM EMP
+      WHERE EMPNO = :emp_number;
+    printf("\n\nEmployee\tSalary\tCommission\n");
+    emp_name.arr[emp_name.len] = '\0';
+    printf("%-8s\t%6.2f\t%6.2f\n", emp_name.arr,salary, commission);
+    total_number = total_number + 1;
+    continue;
+  notfound:
+    printf("\n not found...try again\n");
+  }
+  printf("\n\ntotal number is :%d\n", total_number);
+  EXEC SQL COMMIT WORK RELEASE;
+  exit(0);
+}
+
+void sqlerror()
+{
+  EXEC SQL WHENEVER SQLERROR CONTINUE;
+  printf("\noracle error detected:\n");
+  printf("\n%.70s\n", sqlca.sqlerrm.sqlerrmc);
+  EXEC SQL ROLLBACK RELEASE;
+  exit(1);
+}
+  

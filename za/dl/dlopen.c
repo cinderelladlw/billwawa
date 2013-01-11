@@ -8,6 +8,7 @@ int main()
   char *error;
   
   handle = dlopen("libm.so", RTLD_LAZY);
+
   if(!handle) {
     fprintf(stderr, "%s\n", dlerror());
     exit(1);

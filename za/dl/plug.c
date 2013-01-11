@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 int sx = 250;
+
 void _add(int a, int b);
 void add()
 {
