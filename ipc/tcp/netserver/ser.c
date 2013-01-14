@@ -22,14 +22,15 @@ int g_srv_fd;
 
 //由于有可能不能一次write所有的内容，所以需要全局变量保存内容的长度，内容输出到那里， 
 //在监听到epollout事件后继续上一次的发送 
-char g_out_buf[OUT_BUF_SIZE];//保存输出的内容 
+
+char g_out_buf[OUT_BUF_SIZE];        //保存输出的内容 
 int g_out_buf_offset;                //保存输出到那里 
-int g_out_buf_len;                     //保存输出内容的长度 
-int g_has_write_buf;        //保存是否要写输出内容 
+int g_out_buf_len;                   //保存输出内容的长度 
+int g_has_write_buf;                 //保存是否要写输出内容 
 
-void setnonblocking(int sockFd) { 
+void setnonblocking(int sockFd) 
+{ 
   int opt; 
-
   opt = fcntl(sockFd, F_GETFL); 
   if (opt < 0) { 
     printf("fcntl(F_GETFL) fail."); 
@@ -72,9 +73,8 @@ int write_out_buf(int fd, char *out_buf,int buf_len,int offset)
   } 
   fprintf(stderr, "snd ret:%d\r\n", snd_len); 
   return snd_len; 
-
 } 
-// 
+
 void process_write(int fd, char *in_buf,int buf_len) 
 { 
   char *p_out_buf=g_out_buf; 
@@ -94,10 +94,9 @@ void process_write(int fd, char *in_buf,int buf_len)
 } 
 
 
-int main() { 
-
+int main()
+{ 
   int serverFd; 
-
   serverFd = socket(AF_INET, SOCK_STREAM, 0); 
   g_srv_fd = serverFd; 
 
@@ -111,11 +110,13 @@ int main() {
   ev.events = EPOLLIN | EPOLLET; 
   epoll_ctl(epFd, EPOLL_CTL_ADD, serverFd, &ev); 
 
+  //server addr 
   struct sockaddr_in serverAddr; 
-  socklen_t serverLen = sizeof(struct sockaddr_in); 
+  serverAddr.sin_family = AF_INET;
   serverAddr.sin_addr.s_addr = htonl(INADDR_ANY); 
   serverAddr.sin_port = htons(PORT); 
-  serverAddr.sin_family = AF_INET;
+  
+  socklen_t serverLen = sizeof(struct sockaddr_in); 
   if (bind(serverFd, (struct sockaddr *) &serverAddr, serverLen)) { 
     printf("errno:[%d]:[%s]\n", errno, strerror(errno));
     printf("bind() fail.\n"); 
@@ -134,27 +135,25 @@ int main() {
 
   int i = 0; 
   while (1) { 
-
     int nfds = epoll_wait(epFd, evs, EVENT_ARR, -1); 
     for (i = 0; i < nfds; i++) { 
       if (evs[i].data.fd == serverFd && (evs[i].events & EPOLLIN)) { 
         //epollet需要循环对监听的套接字accept，直到返回EAGAIN 
         do { 
-          if ((clientFd = accept(serverFd, 
-              (struct sockaddr *) &clientAddr, &clientLen)) < 0) { 
+          if ((clientFd = accept(serverFd, (struct sockaddr *) &clientAddr, &clientLen)) < 0) { 
             printf("accept fail.\n"); 
             break; 
           } 
-          printf("Connect from %s:%d\n", inet_ntoa(clientAddr.sin_addr), 
-              htons(clientAddr.sin_port)); 
+          printf("Connect from %s:%d\n", inet_ntoa(clientAddr.sin_addr), htons(clientAddr.sin_port)); 
           setnonblocking(clientFd); 
           ev.data.fd = clientFd; 
           //注意，为了效率，这里直接对EPOLLIN，EPOLLOUT事件监听 
           ev.events = EPOLLIN | EPOLLET | EPOLLOUT; 
           //ev.events = EPOLLIN; 
           epoll_ctl(epFd, EPOLL_CTL_ADD, clientFd, &ev); 
-        }while(clientFd>0); 
-      } else if (evs[i].events & EPOLLIN) { 
+        }while(clientFd > 0); 
+      } 
+      else if (evs[i].events & EPOLLIN) { 
         fprintf(stderr, "epollin event fd:%d\n", clientFd); 
         if ((clientFd = evs[i].data.fd) > 0) { 
           //epollet需要对套接字循环的读，直到len < BUF_SIZE，或者len<=0返回 
@@ -162,12 +161,6 @@ int main() {
           fprintf(stderr, "read fd:%d len:%d\n", clientFd, len); 
           if (len == BUF_SIZE) { 
             do { 
-              /* 
-              if (write(clientFd, buf, len) < 0) { 
-                fprintf(stderr, "write fail!\n"); 
-                //break; 
-              } 
-              */ 
               process_write(clientFd, buf, len); 
               if (len < BUF_SIZE) { 
                 fprintf(stderr, "len <bufsize %d<%d\n", len, 
@@ -182,23 +175,26 @@ int main() {
               close(clientFd); 
               evs[i].data.fd = -1; 
               fprintf(stderr, "close fd:%d\n", clientFd); 
-            } else if (len == -1 && errno != EAGAIN) { 
+            } 
+            else if (len == -1 && errno != EAGAIN) { 
               fprintf(stderr, " fd:%d\n", clientFd); 
               epoll_ctl(epFd, EPOLL_CTL_DEL, clientFd, &ev); 
               close(clientFd); 
               evs[i].data.fd = -1; 
             } 
-          } else if (len > 0 && len < BUF_SIZE) { 
+          } 
+          else if (len > 0 && len < BUF_SIZE) { 
             process_write(clientFd, buf, len); 
-          } else if (len == 0 || (len == -1 && errno != EAGAIN)) { 
+          } 
+          else if (len == 0 || (len == -1 && errno != EAGAIN)) { 
             epoll_ctl(epFd, EPOLL_CTL_DEL, clientFd, &ev); 
             close(clientFd); 
             evs[i].data.fd = -1; 
             fprintf(stderr, "close fd:%d\n", clientFd); 
           } 
-
         } 
-      } else if(evs[i].events & EPOLLOUT){ 
+      } 
+      else if(evs[i].events & EPOLLOUT){ 
         //监听到epollout时间，说明发送缓冲去可以写，那继续上一次的写操作 
         clientFd = evs[i].data.fd; 
         fprintf(stderr, "receive epoll out fd:%d\n", clientFd); 
@@ -209,7 +205,8 @@ int main() {
             g_has_write_buf = 0; 
           } 
         } 
-      }else { 
+      }
+      else { 
         printf("other event.\n"); 
       } 
     } 

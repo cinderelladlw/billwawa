@@ -4,11 +4,13 @@
 #include <time.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <signal.h>
 #define BUFFLEN 1024
 #define SERVER_PORT 8888
 #define BACKLOG 5
 #define PIDNUMB 2
+
 static void handle_connect(int s_s)
 {	
 	int s_c;	/*客户端套接字文件描述符*/

@@ -4,6 +4,7 @@
 #include <time.h>
 #include <string.h>
 #include <stdio.h>
+#include <signal.h>
 #define BUFFLEN 1024
 #define SERVER_PORT 8888
 #define BACKLOG 5
@@ -45,7 +46,8 @@ static void handle_connect(int s_s)
 				close(s_c);/*关闭父进程的客户端连接套接字*/
 			}else{
 				handle_request(s_c);/*处理连接请求*/
-				return(0);	
+                                exit(1);
+				//return 0;	
 			}
 		}
 	}
@@ -57,7 +59,7 @@ int main(int argc, char *argv[])
 {
 	int s_s;	/*服务器套接字文件描述符*/
 	struct sockaddr_in local;	/*本地地址*/	
-	
+        signal(SIGCHLD, SIG_IGN);	
 	/*建立TCP套接字*/
 	s_s = socket(AF_INET, SOCK_STREAM, 0);
 	
