@@ -21,7 +21,7 @@ int main(int argc, char ** argv)
       return -1;
   }
 
-  ret = flock(fileno(g_lockfile), LOCK_EX);
+  ret = flock(fileno(g_lockfile), LOCK_EX|LOCK_NB);
   if (ret != 0) {
       fprintf(stderr, "flock() failed:%s!\n", strerror(errno));
       return -1;
