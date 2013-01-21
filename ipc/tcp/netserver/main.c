@@ -67,7 +67,9 @@ int main()
         exit(EXIT_FAILURE);
     }
 
+    int ib = 0;
     for (;;) {
+        printf("..........num:%d.....................\n", ib++);
         nfds = epoll_wait(epfd, events, MAX_EVENTS, -1);
         if (nfds == -1) {
             perror("epoll_pwait");
@@ -109,6 +111,7 @@ int main()
                     perror("epoll_ctl: mod");
                 }
             }
+            printf("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
             if (events[i].events & EPOLLOUT) {
                 sprintf(buf, "HTTP/1.1 200 OK\r\nContent-Length: %d\r\n\r\nHello World", 11);
                 int nwrite, data_size = strlen(buf);
@@ -127,6 +130,5 @@ int main()
             }
         }
     }
-
     return 0;
 }

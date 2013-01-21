@@ -1,9 +1,6 @@
 // 
 // a simple echo server using epoll in linux
 // 
-// 2009-11-05
-// by sparkling
-// 
 #include <stdlib.h>
 #include <string.h>
 
@@ -17,18 +14,19 @@
 #include <errno.h>
 #include <iostream>
 using namespace std;
+
 #define MAX_EVENTS 500
-struct myevent_s
-{
+struct myevent_s {
     int fd;
     void (*call_back)(int fd, int events, void *arg);
     int events;
     void *arg;
-    int status; // 1: in epoll wait list, 0 not in
-    char buff[128]; // recv data buffer
+    int status;           // 1: in epoll wait list, 0 not in
+    char buff[128];       // recv data buffer
     int len;
-    long last_active; // last active time
+    long last_active;     // last active time
 };
+
 // set event
 void EventSet(myevent_s *ev, int fd, void (*call_back)(int, int, void*), void *arg)
 {
@@ -39,6 +37,7 @@ void EventSet(myevent_s *ev, int fd, void (*call_back)(int, int, void*), void *a
     ev->status = 0;
     ev->last_active = time(NULL);
 }
+
 // add/mod an event to epoll
 void EventAdd(int epollFd, int events, myevent_s *ev)
 {
@@ -46,10 +45,10 @@ void EventAdd(int epollFd, int events, myevent_s *ev)
     int op;
     epv.data.ptr = ev;
     epv.events = ev->events = events;
-    if(ev->status == 1){
+    if(ev->status == 1) {
         op = EPOLL_CTL_MOD;
     }
-    else{
+    else {
         op = EPOLL_CTL_ADD;
         ev->status = 1;
     }
@@ -58,6 +57,7 @@ void EventAdd(int epollFd, int events, myevent_s *ev)
     else
         printf("Event Add OK[fd=%d]\n", ev->fd);
 }
+
 // delete an event from epoll
 void EventDel(int epollFd, myevent_s *ev)
 {
@@ -110,6 +110,7 @@ void AcceptConn(int fd, int events, void *arg)
         printf("new conn[%s:%d][time:%d]\n", inet_ntoa(sin.sin_addr), ntohs(sin.sin_port), g_Events[i].last_active);
     }while(0);
 }
+
 // receive data
 void RecvData(int fd, int events, void *arg)
 {
@@ -138,6 +139,7 @@ void RecvData(int fd, int events, void *arg)
         printf("recv[fd=%d] error[%d]:%s\n", fd, errno, strerror(errno));
     }
 }
+
 // send data
 void SendData(int fd, int events, void *arg)
 {
@@ -159,11 +161,12 @@ void SendData(int fd, int events, void *arg)
         printf("recv[fd=%d] error[%d]\n", fd, errno);
     }
 }
+
 void InitListenSocket(int epollFd, short port)
 {
     int listenFd = socket(AF_INET, SOCK_STREAM, 0);
     fcntl(listenFd, F_SETFL, O_NONBLOCK);        // set non-blocking
-    printf("server listen fd=%d\n", listenFd);
+    printf("server listen fd = %d\n", listenFd);
     EventSet(&g_Events[MAX_EVENTS], listenFd, AcceptConn, &g_Events[MAX_EVENTS]);
     // add listen socket
     EventAdd(epollFd, EPOLLIN|EPOLLET, &g_Events[MAX_EVENTS]);
@@ -176,6 +179,7 @@ void InitListenSocket(int epollFd, short port)
     bind(listenFd, (const sockaddr*)&sin, sizeof(sin));
     listen(listenFd, 5);
 }
+
 int main(int argc, char **argv)
 {
     short port = 12345; // default port

@@ -26,8 +26,8 @@ all: lib exe
 lib: libmbs.a
 exe: cli
 
-cli:cli.o
-	$(CC) $@ $?
+cli:client.o
+	$(CC) -o $@ $?
 
 libmbs.a: $(LIBOBJS)
 	$(AR) -rv $@ $?

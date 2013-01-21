@@ -41,10 +41,11 @@ int main(int argc, char **argv)
     if(readBytes == 0) {
       printf("one picture transmit over!\n");
       break;
-    } else {
+    } 
+    else {
       printf(" read from file to buf ##%d## bytes\n",readBytes);
     }
-    int sendBytes=send(socket_connect,buf,readBytes,0);
+    int sendBytes = send(socket_connect,buf,readBytes,0);
  
     if(sendBytes<0) {
       printf("send error! \n");
@@ -55,15 +56,18 @@ int main(int argc, char **argv)
     }
     memset(buf, 0x00, sizeof(buf));
   }
+
   if(close(socket_connect) != 0) {
     printf("close() error! \n");
-  } else {
+  } 
+  else {
     printf("close ##socket_connect## success!\n");
   }
         
   if(fclose(file_fd)!=0) {
     printf("fclose() error! \n");
-  } else {
+  } 
+  else {
     printf("fclose ##file_fd## success!\n");
   }
   return 0;
