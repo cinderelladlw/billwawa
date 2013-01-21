@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
   }
   ret = listdir(argv[1], a);
   for(sx = 0; (sx < ret); sx++)
-    printf(":::[%s]\n", a[sx]); 
+    printf("[%s]\n", a[sx]); 
   return 0;
 }
 
