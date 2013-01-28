@@ -5,20 +5,14 @@
 #include <pthread.h>
 #include <assert.h>
 
-/*
-*线程池里所有运行和等待的任务都是一个CThread_worker
-*由于所有任务都在链表里，所以是一个链表结构
-*/
 typedef struct worker
 {
-    /*回调函数，任务运行时会调用此函数，注意也可声明成其它形式*/
     void *(*process) (void *arg);
     void *arg;
     struct worker *next;
 
 } CThread_worker;
 
-// 线程池子
 typedef struct
 {
     pthread_mutex_t queue_lock;
@@ -57,10 +51,14 @@ pool_init (int max_thread_num)
      pool->threadid =
          (pthread_t *) malloc (max_thread_num * sizeof (pthread_t));
     int i = 0;
+    pthread_attr_t thread_attr;
+    pthread_attr_init(&thread_attr);
+    pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_DETACHED);
+    pthread_attr_setstacksize(&thread_attr, 1024*32);
     for (i = 0; i < max_thread_num; i++)
      {
-         pthread_create (&(pool->threadid[i]), NULL, thread_routine,
-                 NULL);
+         //pthread_create (&(pool->threadid[i]), NULL, thread_routine, NULL);
+         pthread_create (&(pool->threadid[i]), &thread_attr, thread_routine, NULL);
      }
 }
 
@@ -72,7 +70,7 @@ pool_add_worker (void *(*process) (void *arg), void *arg)
          (CThread_worker *) malloc (sizeof (CThread_worker));
      newworker->process = process;
      newworker->arg = arg;
-     newworker->next = NULL;/*别忘置空*/
+     newworker->next = NULL;
 
      pthread_mutex_lock (&(pool->queue_lock));
      CThread_worker *member = pool->queue_head;
@@ -100,19 +98,16 @@ int
 pool_destroy ()
 {
     if (pool->shutdown)
-        return -1;/*防止两次调用*/
+        return -1;
      pool->shutdown = 1;
 
-    /*唤醒所有等待线程，线程池要销毁了*/
      pthread_cond_broadcast (&(pool->queue_ready));
 
-    /*阻塞等待线程退出，否则就成僵尸了*/
     int i;
     for (i = 0; i < pool->max_thread_num; i++)
          pthread_join (pool->threadid[i], NULL);
      free (pool->threadid);
 
-    /*销毁等待队列*/
      CThread_worker *head = NULL;
     while (pool->queue_head != NULL)
      {
@@ -120,12 +115,10 @@ pool_destroy ()
          pool->queue_head = pool->queue_head->next;
          free (head);
      }
-    /*条件变量和互斥量也别忘了销毁*/
      pthread_mutex_destroy(&(pool->queue_lock));
      pthread_cond_destroy(&(pool->queue_ready));
     
      free (pool);
-    /*销毁后指针置空是个好习惯*/
      pool=NULL;
     return 0;
 }
@@ -168,31 +161,35 @@ thread_routine (void *arg)
      pthread_exit (NULL);
 }
 
-//下面是测试代码
 
 void *
 myprocess (void *arg)
 {
+  //pthread_detach(pthread_self());
   printf ("threadid is 0x%x, working on task %d\n\n", pthread_self (),*(int *) arg);
-  sleep (1);/*休息一秒，延长任务的执行时间*/
+  char *p = (char *)malloc(1024*1024*1024);
+  p = NULL;
+  sleep (1);
   return NULL;
 }
 
 int
 main (int argc, char **argv)
 {
-  pool_init (3);/*线程池中最多三个活动线程*/
-  sleep(2); 
-  int *workingnum = (int *) malloc (sizeof (int) * 10);
+  pool_init (10000);
+  sleep(1); 
+  int *workingnum = (int *) malloc (sizeof (int) * 100000);
   int i;
-  for (i = 0; i < 10; i++)
+  for (i = 0; i < 100000; i++)
   {
        workingnum[i] = i;
        pool_add_worker (myprocess, &workingnum[i]);
   }
-  /*等待所有任务完成*/
   sleep (5);
-  /*销毁线程池*/
+  printf("hello world\n");
+  sleep (60);
+  printf("hello world2......................\n");
+  sleep(3); 
   pool_destroy ();
 
   free (workingnum);
