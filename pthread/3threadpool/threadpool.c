@@ -5,97 +5,75 @@
 #include <pthread.h>
 #include <assert.h>
 
-typedef struct worker
-{
-    void *(*process) (void *arg);
-    void *arg;
-    struct worker *next;
-
+typedef struct worker {
+  void *(*process) (void *arg);
+  void *arg;
+  struct worker *next;
 } CThread_worker;
 
-typedef struct
-{
+typedef struct pool {
     pthread_mutex_t queue_lock;
     pthread_cond_t queue_ready;
-
     CThread_worker *queue_head;
-
     int shutdown;
     pthread_t *threadid;
     int max_thread_num;
     int cur_queue_size;
-
 } CThread_pool;
 
 
 int pool_add_worker (void *(*process) (void *arg), void *arg);
 void *thread_routine (void *arg);
 
-
 static CThread_pool *pool = NULL;
-void
-pool_init (int max_thread_num)
+
+void pool_init (int max_thread_num)
 {
-     pool = (CThread_pool *) malloc (sizeof (CThread_pool));
-
-     pthread_mutex_init (&(pool->queue_lock), NULL);
-     pthread_cond_init (&(pool->queue_ready), NULL);
-
-     pool->queue_head = NULL;
-
-     pool->max_thread_num = max_thread_num;
-     pool->cur_queue_size = 0;
-
-     pool->shutdown = 0;
-
-     pool->threadid =
-         (pthread_t *) malloc (max_thread_num * sizeof (pthread_t));
-    int i = 0;
-    pthread_attr_t thread_attr;
-    pthread_attr_init(&thread_attr);
-    pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_DETACHED);
-    pthread_attr_setstacksize(&thread_attr, 1024*32);
-    for (i = 0; i < max_thread_num; i++)
-     {
-         //pthread_create (&(pool->threadid[i]), NULL, thread_routine, NULL);
-         pthread_create (&(pool->threadid[i]), &thread_attr, thread_routine, NULL);
-     }
+  pool = (CThread_pool *) malloc (sizeof (CThread_pool));
+  pthread_mutex_init (&(pool->queue_lock), NULL);
+  pthread_cond_init (&(pool->queue_ready), NULL);
+  pool->queue_head = NULL;
+  pool->max_thread_num = max_thread_num;
+  pool->cur_queue_size = 0;
+  pool->shutdown = 0;
+  pool->threadid = (pthread_t *) malloc (max_thread_num * sizeof (pthread_t));
+  int i = 0;
+  pthread_attr_t thread_attr;
+  pthread_attr_init(&thread_attr);
+  pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_DETACHED);
+  pthread_attr_setstacksize(&thread_attr, 1024*32);
+  for (i = 0; i < max_thread_num; i++) {
+    //pthread_create (&(pool->threadid[i]), NULL, thread_routine, NULL);
+    pthread_create (&(pool->threadid[i]), &thread_attr, thread_routine, NULL);
+  }
 }
 
 
-int
-pool_add_worker (void *(*process) (void *arg), void *arg)
+int pool_add_worker (void *(*process) (void *arg), void *arg)
 {
-     CThread_worker *newworker =
-         (CThread_worker *) malloc (sizeof (CThread_worker));
-     newworker->process = process;
-     newworker->arg = arg;
-     newworker->next = NULL;
+  CThread_worker *newworker = (CThread_worker *) malloc (sizeof (CThread_worker));
+  newworker->process = process;
+  newworker->arg = arg;
+  newworker->next = NULL;
 
-     pthread_mutex_lock (&(pool->queue_lock));
-     CThread_worker *member = pool->queue_head;
-    if (member != NULL)
-     {
-        while (member->next != NULL)
-             member = member->next;
-         member->next = newworker;
-     }
-    else
-     {
-         pool->queue_head = newworker;
-     }
-
-     assert (pool->queue_head != NULL);
-
-     pool->cur_queue_size++;
-     pthread_mutex_unlock (&(pool->queue_lock));
-     pthread_cond_signal (&(pool->queue_ready));
-    return 0;
+  pthread_mutex_lock (&(pool->queue_lock));
+  CThread_worker *member = pool->queue_head;
+  if (member != NULL) {
+    while (member->next != NULL)
+      member = member->next;
+    member->next = newworker;
+  } else {
+      pool->queue_head = newworker;
+  }
+  assert (pool->queue_head != NULL);
+  pool->cur_queue_size++;
+  pthread_mutex_unlock (&(pool->queue_lock));
+  pthread_cond_signal (&(pool->queue_ready));
+  return 0;
 }
 
 
-int
-pool_destroy ()
+int pool_destroy ()
 {
     if (pool->shutdown)
         return -1;
