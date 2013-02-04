@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <localip>content</localip>
+  <localport>othe</localport>
+  <remoteip attribute="yes">busirecv</remoteip>
+  <remoteport>other</remoteport>
+</config>

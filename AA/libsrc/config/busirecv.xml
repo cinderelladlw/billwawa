@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <localip>content of busisend</localip>
+  <localport>othe</localport>
+  <remoteip attribute="yes">busirecv has attributes</remoteip>
+  <remoteport>other way to create content</remoteport>
+</config>
