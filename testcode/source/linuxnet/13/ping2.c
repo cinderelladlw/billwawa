@@ -13,17 +13,6 @@
 #include <netdb.h>
 #include <pthread.h>
 
-static pingm_pakcet *icmp_findpacket(int seq);
-static unsigned short icmp_cksum(unsigned char *data,  int len);
-static struct timeval icmp_tvsub(struct timeval end,struct timeval begin);
-static void icmp_statistics(void);
-static void icmp_pack(struct icmp *icmph, int seq, struct timeval *tv, int length );
-static int icmp_unpack(char *buf,int len);
-static void *icmp_recv(void *argv);
-static void * icmp_send(void *argv);
-static void icmp_sigint(int signo);
-static void icmp_usage();
-
 
 /* 保存已经发送包的状态值 */
 typedef struct pingm_pakcet{
@@ -48,6 +37,17 @@ static short packet_send = 0;		/*已经发送的数据包多少*/
 static short packet_recv = 0;		/*已经接收的数据包多少*/
 static char dest_str[80];			/*目的主机字符串*/
 static struct timeval tv_begin, tv_end,tv_interval; /*本程序开始发送、结束和时间间隔*/
+
+static pingm_pakcet *icmp_findpacket(int seq);
+static unsigned short icmp_cksum(unsigned char *data,  int len);
+static struct timeval icmp_tvsub(struct timeval end,struct timeval begin);
+static void icmp_statistics(void);
+static void icmp_pack(struct icmp *icmph, int seq, struct timeval *tv, int length );
+static int icmp_unpack(char *buf,int len);
+static void *icmp_recv(void *argv);
+static void * icmp_send(void *argv);
+static void icmp_sigint(int signo);
+static void icmp_usage();
 
 static void icmp_usage()
 {
