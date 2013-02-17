@@ -10,6 +10,12 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <time.h> 
+#include <netinet/ip_icmp.h>
+#include <netinet/in.h>
+#include <netinet/ip.h>
+#include <arpa/inet.h>
+#include <pthread.h>
+
 
 /* 最多线程数 */
 #define MAXCHILD 128
@@ -34,7 +40,7 @@ static inline long
 	/* 用系统时间初始化 */
 	srand((unsigned)time(0));
 	/* 产生一个介于begin和end之间的值 */
-	ret = random(end)%gap + begin;
+	ret = rand()%gap + begin;
 	return ret;
 }
 
@@ -84,7 +90,7 @@ static void
 	struct   dosseg_t 
 	{      
 		struct ip iph;      
-		struct tcphdr tcph;      
+		struct tcp hdr tcph;      
 		unsigned char data[8192];    
 	}  dosseg;  
 

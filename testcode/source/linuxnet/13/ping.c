@@ -1,8 +1,6 @@
-#defined __USE_BSD
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
-#define __FAVOR_BSD
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <errno.h>

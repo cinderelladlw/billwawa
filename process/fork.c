@@ -17,7 +17,6 @@ int main()
     }
     else {
       printf("parent:[%d]\n", getpid());
-      break;
     }
   }
   printf("work hard.\n");

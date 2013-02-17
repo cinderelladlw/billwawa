@@ -1,4 +1,3 @@
-/* ping.c -- 第13章 例子 */ 
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
@@ -13,20 +12,19 @@
 #include <netdb.h>
 #include <pthread.h>
 
+#define K 1024
+#define BUFFERSIZE 72			/*发送缓冲区大小*/
+static unsigned char send_buff[BUFFERSIZE];
 
 /* 保存已经发送包的状态值 */
 typedef struct pingm_pakcet{
 	struct timeval tv_begin;	/*发送的时间*/
 	struct timeval tv_end;		/*接收到的时间*/
-	short seq;				/*序列号*/
-	int flag;					/*1，表示已经发送但没有接收到回应包
-								0，表示接收到回应包*/
+	short seq;		        /*序列号*/
+	int flag;			/*1，表示已经发送但没有接收到回应包
+					  0，表示接收到回应包*/
 }pingm_pakcet;
 static pingm_pakcet pingpacket[128];
-
-#define K 1024
-#define BUFFERSIZE 72			/*发送缓冲区大小*/
-static unsigned char send_buff[BUFFERSIZE];
 
 static unsigned char recv_buff[2*K];	/*为防止接收溢出，接收缓冲区设置大一些*/
 static struct sockaddr_in dest;		/*目的地址*/
