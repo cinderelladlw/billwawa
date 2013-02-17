@@ -1,0 +1,26 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.5.4	//
+Plugin	plugin.h	/^}Plugin;$/;"	t
+_PLUGIN_H_	plugin.h	2;"	d
+add	adder.c	/^double add(double a, double b){$/;"	f
+calc_test	calc.c	/^int calc_test(double a, double b){$/;"	f
+div	diver.c	/^double div(double a, double b){$/;"	f
+dlError	calc.c	/^const char *dlError;$/;"	v
+entry	plugin.h	/^    char entry[128];$/;"	m
+flib	calc.c	/^void *flib;$/;"	v
+get_plugin_nodes	parseconf.c	/^xmlXPathObjectPtr get_plugin_nodes(xmlDocPtr doc, xmlChar *xpath){$/;"	f
+install_plugins	parseconf.c	/^int install_plugins(xmlNodeSetPtr nodes, GSList **list){$/;"	f
+load_plugins	parseconf.c	/^int load_plugins(char *config, GSList **list){$/;"	f
+main	calc.c	/^int main(int argc, char **argv){$/;"	f
+mul	muler.c	/^double mul(double a, double b){$/;"	f
+name	plugin.h	/^    char name[64];$/;"	m
+path	plugin.h	/^    char path[256];$/;"	m
+pfunc	calc.c	/^double (*pfunc)(double a, double b);$/;"	v
+print_list	parseconf.c	/^void print_list(GSList *list){$/;"	f
+rootElement	parseconf.c	/^const char* rootElement = "plugins";$/;"	v
+sub	suber.c	/^double sub(double a, double b){$/;"	f
+version	plugin.h	/^    int version;$/;"	m

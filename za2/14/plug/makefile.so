@@ -1,0 +1,9 @@
+libplug.so:plug.o
+	gcc -shared plug.o -o libplug.so
+plug.o:plug.c plug.h
+	gcc -fpic -c plug.c -o plug.o
+
+all:libplug.so
+
+clean:
+	rm -f *.o

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plugins>
+    <plugin name="adder">
+        <library path="/home/oracle/.libs/adder.so">
+        </library>
+        <entry name="add">
+        </entry>
+    </plugin>
+    <plugin name="suber">
+        <library path="/home/oracle/.libs/suber.so">
+        </library>
+        <entry name="sub">
+        </entry>
+   </plugin>
+   <plugin name="muler">
+        <library path="/home/oracle/.libs/muler.so">
+        </library>
+        <entry name="mul">
+        </entry>
+   </plugin>
+   <plugin name="diver">
+        <library path="/home/oracle/.libs/diver.so">
+        </library>
+        <entry name="div">
+        </entry>
+   </plugin>
+</plugins>

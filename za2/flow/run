@@ -1,0 +1,2 @@
+gcc flow.c -o libflow.so -shared -fpic
+gcc -g  main.c -lflow -I /home/oracle/flow -L /home/oracle/flow

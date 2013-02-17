@@ -1,0 +1,24 @@
+# cat stream
+#! /bin/bash
+# Write by Neil.xu  qq:37391319 email: xurongzhong@gmail.com
+# 2008-8-19 we need to monitor streams of LTS channels, so write this script
+typeset in in_old dif_in dif_in1 dif_out1
+typeset out out_old dif_out
+in_old=$(cat /proc/net/dev | grep eth0 | sed  's=^.*:==' | awk '{ print $1 }' )
+out_old=$(cat /proc/net/dev | grep eth0 | sed  's=^.*:=='  | awk '{ print $9 }')
+while true
+do
+sleep 1
+in=$(cat /proc/net/dev | grep eth0 | sed  's=^.*:=='  | awk '{ print $1 }')
+out=$(cat /proc/net/dev | grep eth0 | sed  's=^.*:=='  | awk '{ print $9 }')
+dif_in=$((in-in_old))
+dif_in1=$((dif_in * 8 / 1024 / 1024 ))
+dif_out=$((out-out_old))
+echo "                                         IN: ${dif_in} bytes     OUT: ${dif_out} bytes "
+dif_out1=$((dif_out * 8 / 1024 / 1024 ))
+echo "IN: ${dif_in1} mbps    OUT: ${dif_out1} mbps"
+in_old=${in}
+out_old=${out}
+done
+
+
