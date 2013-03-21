@@ -3,17 +3,14 @@
 #include  <sys/socket.h>      /* basic socket definitions */
 #include  <netinet/in.h>      /* sockaddr_in{} and other Internet defns */
 #include  <arpa/inet.h>       /* inet(3) functions */
-
 #include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-
 #include <poll.h> /* poll function */
 #include <limits.h>
 
 #define MAXLINE 10240
-
 #ifndef OPEN_MAX
 #define OPEN_MAX 40960
 #endif
@@ -113,9 +110,9 @@ void handle(struct pollfd* clients, int maxClient, int nready) {
 		if (connfd == -1) 
 			continue;
 		if (clients[i].revents & (POLLIN | POLLERR)) {
-			nread = read(connfd, buf, MAXLINE);//读取客户端socket流
+			nread = read(connfd, buf, MAXLINE);
 			if (nread < 0) {
-				perror("read error");
+				perror("read error......");
 				close(connfd);
 				clients[i].fd = -1;
 				continue;
@@ -127,8 +124,8 @@ void handle(struct pollfd* clients, int maxClient, int nready) {
 				continue;
 			}
 
-			write(connfd, buf, nread);//响应客户端  
-			if (--nready <= 0)//没有连接需要处理，退出循环
+			write(connfd, buf, nread);
+			if (--nready <= 0)
 				break;
 		}
 	}

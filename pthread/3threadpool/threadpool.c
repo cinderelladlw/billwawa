@@ -21,10 +21,8 @@ typedef struct pool {
     int cur_queue_size;
 } CThread_pool;
 
-
 int pool_add_worker (void *(*process) (void *arg), void *arg);
 void *thread_routine (void *arg);
-
 static CThread_pool *pool = NULL;
 
 void pool_init (int max_thread_num)
@@ -41,13 +39,11 @@ void pool_init (int max_thread_num)
   pthread_attr_t thread_attr;
   pthread_attr_init(&thread_attr);
   pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_DETACHED);
-  pthread_attr_setstacksize(&thread_attr, 1024*32);
+  pthread_attr_setstacksize(&thread_attr, 256*1024);
   for (i = 0; i < max_thread_num; i++) {
-    //pthread_create (&(pool->threadid[i]), NULL, thread_routine, NULL);
     pthread_create (&(pool->threadid[i]), &thread_attr, thread_routine, NULL);
   }
 }
-
 
 int pool_add_worker (void *(*process) (void *arg), void *arg)
 {
@@ -83,12 +79,11 @@ int pool_destroy ()
 
     int i;
     for (i = 0; i < pool->max_thread_num; i++)
-         pthread_join (pool->threadid[i], NULL);
-     free (pool->threadid);
+      pthread_join (pool->threadid[i], NULL);
+    free (pool->threadid);
 
-     CThread_worker *head = NULL;
-    while (pool->queue_head != NULL)
-     {
+    CThread_worker *head = NULL;
+    while (pool->queue_head != NULL) {
          head = pool->queue_head;
          pool->queue_head = pool->queue_head->next;
          free (head);
@@ -154,11 +149,11 @@ myprocess (void *arg)
 int
 main (int argc, char **argv)
 {
-  pool_init (10000);
+  pool_init (5800);
   sleep(1); 
-  int *workingnum = (int *) malloc (sizeof (int) * 100000);
+  int *workingnum = (int *) malloc (sizeof (int) * 30000);
   int i;
-  for (i = 0; i < 100000; i++)
+  for (i = 0; i < 30000; i++)
   {
        workingnum[i] = i;
        pool_add_worker (myprocess, &workingnum[i]);
