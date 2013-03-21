@@ -289,9 +289,9 @@ static void * icmp_send(void *argv)
 			if(packet)
 			{
 				packet->seq = packet_send;			/* 设置seq */
-				packet->flag = 1;						/* 已经使用 */
-				gettimeofday( &packet->tv_begin, NULL);/* 发送时间 */
-				packet_send ++;						/* 计数增加 */
+				packet->flag = 1;				/* 已经使用 */
+				gettimeofday( &packet->tv_begin, NULL);         /* 发送时间 */
+				packet_send ++;					/* 计数增加 */
 			}
 		}
 
@@ -381,7 +381,7 @@ int main(int argc, char *argv[])
 
 	/* 将目的地址字符串考出 */
 	memcpy(dest_str,  argv[1], strlen(argv[1])+1);
-	memset(pingpacket, 0, sizeof(pingm_pakcet) * 128);
+	memset(pingpacket, 0x00, sizeof(pingm_pakcet) * 128);
 
 	/* socket初始化 */
 	rawsock = socket(AF_INET, SOCK_RAW,  protocol->p_proto);

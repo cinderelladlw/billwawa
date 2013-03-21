@@ -7,6 +7,6 @@
 #include <time.h>
 #include <stdarg.h>
 
-void WriteLog(const char * Fmt,...); 
+void WriteLog(const char *Fmt, ...); 
 
 #endif 
