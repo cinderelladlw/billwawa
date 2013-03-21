@@ -1,0 +1,13 @@
+git rm  socket/.gethostbyname.c.swn
+git rm  socket/.gethostbyname.c.swo
+git rm  socket/.gethostbyname.c.swp
+git rm  socket/socket/a.out
+git rm  socket/tcp/main.c
+git rm  socket/tcp/simple_tcp/a.out
+git rm  socket/tcp/socket.c
+git rm  socket/tcp/socket.h
+git rm  socket/tcp/socket.so
+git rm  za/2log/readme.txt
+git rm  za/2log/test.log
+git rm  za/callback.c
+git rm  za/icmp.c
