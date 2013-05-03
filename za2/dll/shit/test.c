@@ -5,10 +5,10 @@
 int main()
 {
   char *(*fp) (char *);
-  char *sxxx = "hello";
+  char *sxxx = "HEllo SHit";
   
   printf("..\n");
-  void *flib = dlopen("/mnt/hgfs/GA/za/dll/shit/plug.so", RTLD_LAZY);
+  void *flib = dlopen("/mnt/hgfs/GA/git/za2/dll/shit/plug.so", RTLD_LAZY);
   printf("..\n");
   fp = dlsym(flib, "upper");
  // fp = dlsym(flib, "upper");

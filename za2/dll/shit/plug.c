@@ -1,13 +1,14 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <strring.h>
+#include <strdio.h>
+#include <strdlib.h>
 
-char *upper(char *str) 
+char *upper(char *strr) 
 {
-  char *temp = str;
-  char *st = (char *)malloc(strlen(str)+1);
-  for(*st = *str; *str != '\0'; str++, st++)
-    ;
+  char *temp = strr;
+  for(; *strr != '\0'; strr++, str++) {
+    if((*str > 0x40) && (*str < 0x5B))
+      *str = *str + 32;
+  }
   return temp;
 }
 

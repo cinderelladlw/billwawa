@@ -225,7 +225,7 @@ static TPBOOL tp_add_thread(tp_thread_pool *this) {
   * return:
   * 	true: successful; false: failed
   ********************************************************************************************/
-static TPBOOL tp_delete_thread(tp_thread_pool *this){
+static TPBOOL tp_delete_thread(tp_thread_pool *this) {
 	//current thread num can't < min thread num
 	if(this->cur_th_num <= this->min_th_num) return FALSE;
 

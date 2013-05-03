@@ -7,7 +7,7 @@ int main()
   double (*cosine)(double);
   char *error;
   
-  handle = dlopen("libm.so", RTLD_LAZY);
+  handle = dlopen("/mnt/hgfs/GA/git/za/dl/libm.so", RTLD_LAZY);
 
   if(!handle) {
     fprintf(stderr, "%s\n", dlerror());

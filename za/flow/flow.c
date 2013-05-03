@@ -79,9 +79,6 @@ void _shmflush(int arg)
   printf("flush end  \n");
 }
 
-
-
-
 int _init_sem(int sem_id, int init_value)
 {
   union semun sem_union;

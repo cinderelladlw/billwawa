@@ -28,7 +28,8 @@ static int committransaction(char *commitsql, int commitnumber) {
 }
   
 
-int main(int argc, char **argv){
+int main(int argc, char **argv)
+{
   int j = atoi(argv[3]);
   int k = atoi(argv[4]);
   if( argc != 5 ){

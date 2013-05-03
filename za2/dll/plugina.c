@@ -3,7 +3,7 @@
 
 int c = 0;
 int func(int a, int b) {
-	c = 3*a + 4*b + 6;
+	c = 3*a + 4*b + 6+100;
         printf(".................................woqu\n\n");
 	return c;
 }

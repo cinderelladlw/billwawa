@@ -1,20 +1,15 @@
 #include <dlfcn.h>
 #include <stdio.h>
 
-//句柄
 void *flib;
-
-//入口函数原型
 typedef int (*pfunc)(int a, int b);
-
-//错误信息字符串
 char *error_message;
 
 int plugin_test(){
 	int a = 1, b = 4;
 	int result = 0;
-	//加载plugina.so，以RTLD_LAZY方式
-	flib = dlopen("/mnt/hgfs/GA/za/dll/plugina.so", RTLD_LAZY);
+        printf("..\n");
+	flib = dlopen("/mnt/hgfs/GA/git/za2/dll/plugina.so", RTLD_LAZY);
 	error_message = dlerror();
 	if(error_message){
 		return (-1);

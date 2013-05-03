@@ -1,8 +1,10 @@
+#include "listdir.h"
+
+/*
 #include <dirent.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
 
 int listdir(char *directory, char **array);
 
@@ -21,7 +23,7 @@ int main(int argc, char *argv[])
     printf("[%s]\n", a[sx]); 
   return 0;
 }
-
+*/
 int listdir(char *directory, char **array)
 {
   DIR *dp;
@@ -33,6 +35,11 @@ int listdir(char *directory, char **array)
   int i = 0;
   while((dirp = readdir(dp)) != NULL) {
     if(dirp->d_name[0] == '.')
+      continue;
+    char *tmp = NULL;
+    if((tmp = strchr(dirp -> d_name, '.')) == NULL)
+      continue;
+    if(memcmp(tmp + 1, "so", 2) != 0)
       continue;
     sprintf(array[i], "%s", dirp->d_name);
     i++;
