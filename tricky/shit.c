@@ -22,7 +22,7 @@ void send_bits(state *s, unsigned char value, int len)
     //MSB first
     s->output[s->outing++] = (unsigned char)((s->bi_buf) >> 8);
     s->output[s->outing++] = (unsigned char)((s->bi_buf) & 0xff);
-    
+
     s->bi_buf = val << rm;
     s->bi_valid = len - rm;
   }
@@ -60,17 +60,17 @@ int main()
   strcpy(s->input, "123456789abc");
 
   unsigned char ch;
-  
+
   //删除一天
   ch = s->input[s->ining++];
-  send_bits(s, ch, 7); 
-  
+  send_bits(s, ch, 7);
+
   while(s->ining < strlen(s->input))
   {
     ch = s->input[s->ining++];
     send_bits(s, ch, 8);
   }
-  
+
   //新增一天, 假设1
   if(1)
   {
@@ -80,16 +80,16 @@ int main()
   {
     send_bits(s, 0x0, 1);
   }
-  
+
   //清空buf
   fflush_bits(s);
-  
+
   int i;
   for(i = 0; i < strlen(s->input); i++)
   {
     printf("%02hhx ", s->output[i]);
   }
   printf("%02hhx\n", s->output[i]);
-    
+
   return(0);
 }

@@ -15,7 +15,7 @@ int count(int a[], int n)
       }
     }
     i++;
-  }        
+  }
 }
 
 int main()
